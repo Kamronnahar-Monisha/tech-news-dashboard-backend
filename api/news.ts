@@ -16,10 +16,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log(query,category);
 
     // Return mock data if API key is missing
-    if (!apiKey) {
-      const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
-      return res.json(JSON.parse(mockData));
-    }
+    // if (!apiKey) {
+    //   const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+    //   return res.json(JSON.parse(mockData));
+    // }
 
     const url = `https://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(query)}${category ? '+' + encodeURIComponent(category) : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
 

@@ -1,63 +1,31 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-//import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import axios from 'axios';
-import dotenv from 'dotenv';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
 dotenv.config();
-const app = express();
-//const PORT = process.env.PORT || 3001;
 
-app.use(cors());
-app.use(helmet());
-//app.use(morgan('dev'));
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const mockNewsPath = path.join(process.cwd(), 'mock/news.sample.json');
 
-// Basic rate limiting
-const limiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 30,
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-app.use(limiter);
+  try {
+    const query = (req.query.q as string) || 'technology';
+    const category = (req.query.category as string) || '';
+    const apiKey = process.env.NEWSAPI_KEY;
 
-// Mock news fallback
-const mockNewsPath = path.join(__dirname, '../mock/news.sample.json');
-
-app.get('/news', async (req, res) => {
-    //console.log(req);
-    interface Article {
-        source: { id: string | null; name: string };
-        author: string | null;
-        title: string;
-        description: string;
-        url: string;
-        urlToImage: string;
-        publishedAt: string;
-        content: string;
+    // If API key is missing, return mock data
+    if (!apiKey) {
+      const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+      return res.json(JSON.parse(mockData));
     }
-    try {
-        const query: any | string = req.query.q || 'technology';
-        const category = req.query.category;
-        const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
 
-        if (!process.env.NEWSAPI_KEY) {
-            const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
-            return res.json(JSON.parse(mockData));
-        }
+    const url = `https://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(query)}${category ? '+' + encodeURIComponent(category) : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
 
-        const response = await axios.get(url);
-        console.log(response.data);
-        res.json(response.data);
-    } catch (error) {
-        const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
-        res.json(JSON.parse(mockData));
-    }
-});
-
-//app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
-export default app;
+    const response = await axios.get(url);
+    res.status(200).json(response.data.articles);
+  } catch (error) {
+    const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+    res.status(200).json(JSON.parse(mockData));
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "totalResults": 1,
+  "articles": [
+    {
+      "source": { "id": null, "name": "Mock News" },
+      "author": "Tech Author",
+      "title": "Sample Tech Article",
+      "description": "This is a sample tech news article.",
+      "url": "https://example.com/sample-article",
+      "urlToImage": "https://via.placeholder.com/150",
+      "publishedAt": "2025-01-01T00:00:00Z",
+      "content": "Full content of the sample article."
+    }
+  ]
+}

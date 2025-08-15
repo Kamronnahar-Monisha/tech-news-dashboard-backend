@@ -21,7 +21,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.json(JSON.parse(mockData));
     }
 
-    const url = `https://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(query)}${encodeURIComponent(category) ? '+' + encodeURIComponent(category) : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
+    //const url = `https://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(query)}${encodeURIComponent(category) ? '+' + encodeURIComponent(category) : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
+    const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
 
     const response = await axios.get(url);
     res.status(200).json(response.data.articles);

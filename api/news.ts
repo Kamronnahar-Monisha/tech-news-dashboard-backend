@@ -10,24 +10,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const mockNewsPath = path.join(process.cwd(), 'mock/news.sample.json');
 
   try {
-    const query = (req.query.q as string) || 'technology';
-    const category = (req.query.category as string) || '';
-    const apiKey = process.env.NEWSAPI_KEY;
-    console.log(query,category);
+     const query: any | string = req.query.q || 'technology';
+        const category = req.query.category;
+        const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
 
-    // Return mock data if API key is missing
-    if (!apiKey) {
-      const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
-      return res.json(JSON.parse(mockData));
+        if (!process.env.NEWSAPI_KEY) {
+            const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+            return res.json(JSON.parse(mockData));
+        }
+
+        const response = await axios.get(url);
+        console.log(response.data);
+        res.json(response.data);
+    } catch (error) {
+        const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+        res.json(JSON.parse(mockData));
     }
+//     const query = (req.query.q as string) || 'technology';
+//     const category = (req.query.category as string) || '';
+//     const apiKey = process.env.NEWSAPI_KEY;
+//     console.log(query,category);
 
-    //const url = `https://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(query)}${encodeURIComponent(category) ? '+' + encodeURIComponent(category) : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
-    const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
+//     // Return mock data if API key is missing
+//     if (!apiKey) {
+//       const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+//       return res.json(JSON.parse(mockData));
+//     }
 
-    const response = await axios.get(url);
-    res.status(200).json(response.data.articles);
-  } catch (error) {
-    const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
-    res.status(200).json(JSON.parse(mockData));
-  }
+//     //const url = `https://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(query)}${encodeURIComponent(category) ? '+' + encodeURIComponent(category) : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
+//     const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${apiKey}&language=en&pageSize=50`;
+
+//     const response = await axios.get(url);
+//     res.status(200).json(response.data.articles);
+//   } catch (error) {
+//     const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
+//     res.status(200).json(JSON.parse(mockData));
+//   }
 }

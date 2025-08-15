@@ -13,6 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const query = (req.query.q as string) || 'technology';
     const category = (req.query.category as string) || '';
     const apiKey = process.env.NEWSAPI_KEY;
+    console.log(query,category);
 
     // Return mock data if API key is missing
     if (!apiKey) {

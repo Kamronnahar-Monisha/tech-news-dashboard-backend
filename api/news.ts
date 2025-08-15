@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const query: any | string = req.query.q || 'technology';
         const category = req.query.category;
-        res.json({ query, category });
+        res.json([]);
         // const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
 
         //     if (!process.env.NEWSAPI_KEY) {

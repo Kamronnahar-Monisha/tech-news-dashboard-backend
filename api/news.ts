@@ -10,7 +10,7 @@ dotenv.config();
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     const mockNewsPath = path.join(process.cwd(), 'mock/news.sample.json');
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow all origins
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS'); // allowed methods
+    res.setHeader('Access-Control-Allow-Methods', 'GET'); // allowed methods
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     try {

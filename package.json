@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node api/news.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "ts-node api/news.ts"
   },
   "dependencies": {
+    "@vercel/node": "^5.3.13",
     "axios": "^1.11.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -18,8 +19,8 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
-    "@types/node": "^24.3.0",
     "@types/morgan": "^1.9.4",
+    "@types/node": "^24.3.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"

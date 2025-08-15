@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const category = (req.query.category as string) || '';
     const apiKey = process.env.NEWSAPI_KEY;
 
-    // If API key is missing, return mock data
+    // Return mock data if API key is missing
     if (!apiKey) {
       const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
       return res.json(JSON.parse(mockData));

@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const query = req.query.q || 'technology';
         const category = req.query.category;
-        const url = `https://newsapi.org/v2/everything?qInTitle=${query}${category ? '+' + category : ''}&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
+        const url = `https://newsapi.org/v2/everything?q=*&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
         if (!process.env.NEWSAPI_KEY) {
             const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
             return res.json(JSON.parse(mockData));

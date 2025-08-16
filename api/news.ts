@@ -26,7 +26,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const query = req.query.q || 'technology';
         const category = req.query.category;
-        const url = `https://newsapi.org/v2/everything?q=${category}&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
+        let url;
+        if (!category){
+             url = `https://newsapi.org/v2/everything?q=*&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
+        }else{
+             url = `https://newsapi.org/v2/everything?q=${category}&apiKey=${process.env.NEWSAPI_KEY}&language=en&pageSize=50`;
+        }
         if (!process.env.NEWSAPI_KEY) {
             const mockData = fs.readFileSync(mockNewsPath, 'utf-8');
             return res.json(JSON.parse(mockData));
